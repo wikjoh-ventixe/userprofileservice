@@ -6,6 +6,7 @@ namespace Data.Entities;
 public class UserAddressEntity
 {
     [Key]
+    [ForeignKey(nameof(UserProfile))]
     public string UserId { get; set; } = null!;
 
     [Column(TypeName = "nvarchar(50)")]

@@ -35,7 +35,7 @@ public class UserProfileService(IUserProfileService userProfileService) : GrpcUs
         {
             Succeeded = result.Succeeded,
             StatusCode = result.StatusCode,
-            ErrorMessage = result.ErrorMessage,
+            ErrorMessage = result.ErrorMessage ?? string.Empty,
             UserId = request.UserId,
         };
     }
@@ -52,7 +52,7 @@ public class UserProfileService(IUserProfileService userProfileService) : GrpcUs
         {
             Succeeded = result.Succeeded,
             StatusCode = result.StatusCode,
-            ErrorMessage = result.ErrorMessage,
+            ErrorMessage = result.ErrorMessage ?? string.Empty,
         };
 
         if (result.Data != null)
@@ -89,7 +89,7 @@ public class UserProfileService(IUserProfileService userProfileService) : GrpcUs
         {
             Succeeded = result.Succeeded,
             StatusCode = result.StatusCode,
-            ErrorMessage = result.ErrorMessage,
+            ErrorMessage = result.ErrorMessage ?? string.Empty,
         };
 
         if (result.Data != null)

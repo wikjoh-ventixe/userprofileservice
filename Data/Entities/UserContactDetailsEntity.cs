@@ -6,6 +6,7 @@ namespace Data.Entities;
 public class UserContactDetailsEntity
 {
     [Key]
+    [ForeignKey(nameof(UserProfile))]
     public string UserId { get; set; } = null!;
 
     [Column(TypeName = "varchar(256)")]
