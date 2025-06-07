@@ -7,6 +7,7 @@ public class UserProfileDbContext(DbContextOptions<UserProfileDbContext> options
 {
     public DbSet<UserProfileEntity> UserProfiles { get; set; }
     public DbSet<UserContactDetailsEntity> UserContactDetails { get; set; }
+    public DbSet<UserAddressEntity> UserAddress { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
