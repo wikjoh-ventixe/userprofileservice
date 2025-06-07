@@ -6,7 +6,7 @@ namespace Data.Context;
 public class UserProfileDbContext(DbContextOptions<UserProfileDbContext> options) : DbContext(options)
 {
     public DbSet<UserProfileEntity> UserProfiles { get; set; }
-    public DbSet<UserProfileContactDetailsEntity> UserProfileContactDetails { get; set; }
+    public DbSet<UserContactDetailsEntity> UserContactDetails { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

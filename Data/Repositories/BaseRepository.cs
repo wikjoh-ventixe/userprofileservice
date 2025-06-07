@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using Data.Interfaces;
+using System.Reflection;
 
 namespace Data.Repositories;
 
-public class BaseRepository<TEntity>(UserProfileDbContext context) : IBaseRepository<TEntity> where TEntity : class
+public abstract class BaseRepository<TEntity>(UserProfileDbContext context) : IBaseRepository<TEntity> where TEntity : class
 {
     protected readonly UserProfileDbContext _context = context;
     protected readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
@@ -57,7 +58,7 @@ public class BaseRepository<TEntity>(UserProfileDbContext context) : IBaseReposi
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-            return RepositoryResult<bool?>.InternalServerErrror(ex.Message);
+            return RepositoryResult<bool?>.InternalServerError($"Exception occurred in {MethodBase.GetCurrentMethod()!.Name}.");
         }
     }
 
@@ -65,49 +66,75 @@ public class BaseRepository<TEntity>(UserProfileDbContext context) : IBaseReposi
     // READ
     public virtual async Task<RepositoryResult<IEnumerable<TEntity>>> GetAllAsync(bool orderByDescending = false, Expression<Func<TEntity, object>>? sortBy = null, Expression<Func<TEntity, bool>>? where = null, params Expression<Func<TEntity, object>>[] includes)
     {
-        IQueryable<TEntity> query = _dbSet;
+        try
+        {
+            IQueryable<TEntity> query = _dbSet;
 
-        if (where != null)
-            query = query.Where(where);
+            if (where != null)
+                query = query.Where(where);
 
-        if (includes != null && includes.Length != 0)
-            foreach (var include in includes)
-                query = query.Include(include);
+            if (includes != null && includes.Length != 0)
+                foreach (var include in includes)
+                    query = query.Include(include);
 
-        if (sortBy != null)
-            query = orderByDescending
-                ? query.OrderByDescending(sortBy)
-                : query.OrderBy(sortBy);
+            if (sortBy != null)
+                query = orderByDescending
+                    ? query.OrderByDescending(sortBy)
+                    : query.OrderBy(sortBy);
 
-        var entities = await query.ToListAsync();
-        return RepositoryResult<IEnumerable<TEntity>>.Ok(entities);
+            var entities = await query.ToListAsync();
+            return RepositoryResult<IEnumerable<TEntity>>.Ok(entities);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return RepositoryResult<IEnumerable<TEntity>>.InternalServerError($"Exception occurred in {MethodBase.GetCurrentMethod()!.Name}.");
+        }
     }
 
     public virtual async Task<RepositoryResult<TEntity>> GetOneAsync(Expression<Func<TEntity, bool>> where, params Expression<Func<TEntity, object>>[] includes)
     {
-        IQueryable<TEntity> query = _dbSet;
+        try
+        {
+            IQueryable<TEntity> query = _dbSet;
 
-        if (includes != null && includes.Length != 0)
-            foreach (var include in includes)
-                query = query.Include(include);
+            if (includes != null && includes.Length != 0)
+                foreach (var include in includes)
+                    query = query.Include(include);
 
 
-        var entity = await query.FirstOrDefaultAsync(where);
-        if (entity == null)
-            return RepositoryResult<TEntity>.NotFound("Entity not found.");
+            var entity = await query.FirstOrDefaultAsync(where);
+            if (entity == null)
+                return RepositoryResult<TEntity>.NotFound("Entity not found.");
 
-        return RepositoryResult<TEntity>.Ok(entity);
+            return RepositoryResult<TEntity>.Ok(entity);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return RepositoryResult<TEntity>.InternalServerError($"Exception occurred in {MethodBase.GetCurrentMethod()!.Name}.");
+        }
     }
 
     public virtual async Task<RepositoryResult<bool?>> ExistsAsync(Expression<Func<TEntity, bool>> expression)
     {
-        if (expression == null)
-            return RepositoryResult<bool?>.BadRequest("Expression cannot be null.");
+        try
+        {
+            if (expression == null)
+                return RepositoryResult<bool?>.BadRequest("Expression cannot be null.");
 
-        var exists = await _dbSet.AnyAsync(expression);
-        return exists
-            ? RepositoryResult<bool?>.NoContent()
-            : RepositoryResult<bool?>.NotFound("Entity not found.");
+            var exists = await _dbSet.AnyAsync(expression);
+            return exists
+                ? RepositoryResult<bool?>.NoContent()
+                : RepositoryResult<bool?>.NotFound("Entity not found.");
+        }
+        catch (Exception ex)
+        {
+            // catch db connection failure etc
+            Debug.WriteLine(ex.Message);
+            return RepositoryResult<bool?>.InternalServerError($"Exception occurred in {MethodBase.GetCurrentMethod()!.Name}.");
+        }
+
     }
 
 
@@ -125,7 +152,7 @@ public class BaseRepository<TEntity>(UserProfileDbContext context) : IBaseReposi
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-            return RepositoryResult<bool?>.InternalServerErrror(ex.Message);
+            return RepositoryResult<bool?>.InternalServerError($"Exception occurred in {MethodBase.GetCurrentMethod()!.Name}.");
         }
     }
 
@@ -144,7 +171,7 @@ public class BaseRepository<TEntity>(UserProfileDbContext context) : IBaseReposi
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-            return RepositoryResult<bool?>.InternalServerErrror(ex.Message);
+            return RepositoryResult<bool?>.InternalServerError($"Exception occurred in {MethodBase.GetCurrentMethod()!.Name}.");
         }
     }
 
@@ -160,7 +187,7 @@ public class BaseRepository<TEntity>(UserProfileDbContext context) : IBaseReposi
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-            return RepositoryResult<bool?>.InternalServerErrror(ex.Message);
+            return RepositoryResult<bool?>.InternalServerError($"Exception occurred in {MethodBase.GetCurrentMethod()!.Name}.");
         }
     }
 }

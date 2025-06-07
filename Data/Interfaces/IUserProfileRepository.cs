@@ -1,6 +1,8 @@
-﻿namespace Data.Interfaces;
+﻿using Data.Entities;
 
-public interface IUserProfileRepository
+namespace Data.Interfaces;
+
+public interface IUserProfileRepository : IBaseRepository<UserProfileEntity>
 {
 
 }

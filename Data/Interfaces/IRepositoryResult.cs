@@ -12,7 +12,7 @@ public interface IRepositoryResult<T>
     static abstract RepositoryResult<T> AlreadyExists(string errorMessage);
     static abstract RepositoryResult<T> BadRequest(string errorMessage);
     static abstract RepositoryResult<T> Created(T data);
-    static abstract RepositoryResult<T> InternalServerErrror(string errorMessage);
+    static abstract RepositoryResult<T> InternalServerError(string errorMessage);
     static abstract RepositoryResult<T> NoContent();
     static abstract RepositoryResult<T> NotFound(string errorMessage);
     static abstract RepositoryResult<T> Ok();
