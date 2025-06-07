@@ -81,7 +81,7 @@ public class UserProfileService(IUserProfileRepository userProfileRepository) : 
 
 
     // READ
-    public async Task<UserProfileResult<IEnumerable<UserProfile>>> GetAllUserProfiles()
+    public async Task<UserProfileResult<IEnumerable<UserProfile>>> GetAllUserProfilesAsync()
     {
         var result = await _userProfileRepository.GetAllAsync(false, null, null, x => x.ContactDetails, x => x.Address );
         if (!result.Succeeded)
@@ -110,7 +110,7 @@ public class UserProfileService(IUserProfileRepository userProfileRepository) : 
         return UserProfileResult<IEnumerable<UserProfile>>.Ok(userProfiles!);
     }
 
-    public async Task<UserProfileResult<UserProfile?>> GetUserProfileById(string id)
+    public async Task<UserProfileResult<UserProfile?>> GetUserProfileByIdAsync(string id)
     {
         var result = await _userProfileRepository.GetOneAsync(x => x.UserId == id, x => x.ContactDetails, x => x.Address);
         if (!result.Succeeded || result.Data == null)

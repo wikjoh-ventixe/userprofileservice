@@ -6,6 +6,6 @@ namespace Business.Interfaces;
 public interface IUserProfileService
 {
     Task<UserProfileResult<UserProfile?>> CreateUserProfileAsync(CreateUserProfileRequestDto request);
-    Task<UserProfileResult<IEnumerable<UserProfile>>> GetAllUserProfiles();
-    Task<UserProfileResult<UserProfile?>> GetUserProfileById(string id);
+    Task<UserProfileResult<IEnumerable<UserProfile>>> GetAllUserProfilesAsync();
+    Task<UserProfileResult<UserProfile?>> GetUserProfileByIdAsync(string id);
 }

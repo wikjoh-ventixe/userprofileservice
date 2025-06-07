@@ -1,10 +1,34 @@
+using Business.Interfaces;
+using Business.Services;
+using Data.Context;
+using Data.Interfaces;
+using Data.Repositories;
+using Grpc.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+builder.Services.AddDbContext<UserProfileDbContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IUserProfileService, Business.Services.UserProfileService>();
+builder.Services.AddSwaggerGen();
+builder.Services.AddGrpc();
+
 var app = builder.Build();
 app.MapOpenApi();
+
+app.MapGrpcService<Grpc.Services.UserProfileService>();
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "User Profile Service API");
+    c.RoutePrefix = string.Empty;
+});
+
 app.UseHttpsRedirection();
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
