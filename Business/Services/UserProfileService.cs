@@ -93,7 +93,7 @@ public class UserProfileService(IUserProfileRepository userProfileRepository) : 
             UserId = x.UserId,
             FirstName = x.FirstName,
             LastName = x.LastName,
-            FullName = x.LastName,
+            FullName = x.FullName,
             ContactDetails = new UserContactDetails
             {
                 Email = x.ContactDetails.Email,
@@ -122,7 +122,7 @@ public class UserProfileService(IUserProfileRepository userProfileRepository) : 
             UserId = entity.UserId,
             FirstName = entity.FirstName,
             LastName = entity.LastName,
-            FullName = entity.LastName,
+            FullName = entity.FullName,
             ContactDetails = new UserContactDetails
             {
                 Email = entity.ContactDetails.Email,
